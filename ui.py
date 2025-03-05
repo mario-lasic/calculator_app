@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (QApplication, QWidget, 
                                QVBoxLayout, QHBoxLayout, 
-                               QPushButton, QLineEdit, QLabel)
+                               QPushButton, QLineEdit, QLabel,
+                               QGridLayout)
 import sys
 from calculate import Calculate
 
@@ -18,39 +19,43 @@ class Calculator(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(self.result_field)
 
-        self.signs = [['AC', '^', '%', '/'],'X','-','+',['S','0','.', '=']]
+        self.signs = [['AC', '^', '%', '/'], 'X', '-', '+', ['0', '.', '=']]
 
-        buttons_layout = QVBoxLayout()
+        buttons_layout = QGridLayout()
         counter = 7
-        for row in range(0,5):
-            row_layout = QHBoxLayout()
-            for columns in range(0,4):
+        for row in range(0, 5):
+            for column in range(0, 4):
                 if row == 0:
-                    button = QPushButton(self.signs[row][columns])
+                    button = QPushButton(self.signs[row][column])
                     button.clicked.connect(self.button_clicked)
-                    row_layout.addWidget(button)
+                    buttons_layout.addWidget(button, row, column)
                 elif row == 4:
-                    button = QPushButton(self.signs[row][columns])
-                    button.clicked.connect(self.button_clicked)
-                    if columns == 3:
-                        button.setObjectName('equals')
-                    row_layout.addWidget(button)
-                elif columns == 3:
+                    if column == 3:
+                        print("HERE")
+                        continue
+                    else:
+                        button = QPushButton(self.signs[row][column])
+                        button.clicked.connect(self.button_clicked)
+                        if column == 2:
+                            button.setObjectName('equals')
+                            buttons_layout.addWidget(button, row, column, 1, 2)  # Span 2 columns
+                        else:
+                            buttons_layout.addWidget(button, row, column)
+                elif column == 3:
                     button = QPushButton(self.signs[row])
                     button.clicked.connect(self.button_clicked)
-                    row_layout.addWidget(button)
+                    buttons_layout.addWidget(button, row, column)
                 else:
                     button = QPushButton(str(counter))
                     button.clicked.connect(self.button_clicked)
-                    row_layout.addWidget(button)
+                    buttons_layout.addWidget(button, row, column)
                     counter += 1
             if not row == 0 and not row == 4:
                 counter -= 6
 
-            buttons_layout.addLayout(row_layout)
-
         layout.addLayout(buttons_layout)
         self.setLayout(layout)
+
 
     def button_clicked(self):
         button = self.sender()
@@ -66,6 +71,9 @@ class Calculator(QWidget):
         elif value == '=':
             calculate = Calculate(self.result_field.text())
             result = calculate.calculate()
+            self.result_field.setText(str(result))
+        else:
+            self.result_field.setText("ERROR")
 
     def restart(self):
         self.result_field.setText('')
