@@ -15,6 +15,7 @@ class Calculator(QWidget):
         self.createUI()
         self.apply_style()
 
+    # This method will create the UI of the calculator
     def createUI(self):
         self.result_field = QLabel()
         layout = QVBoxLayout()
@@ -23,7 +24,8 @@ class Calculator(QWidget):
         self.signs = [['AC', '^', '%', '/'], ['7', '8', '9', 'X'], 
                       ['4', '5', '6', '-'], ['1', '2', '3', '+'], 
                       ['0', '.', '=', '']]
-
+        
+        # Create the buttons
         buttons_layout = QGridLayout()
         for row in range(5):
             for column in range(4):
@@ -40,11 +42,13 @@ class Calculator(QWidget):
         layout.addLayout(buttons_layout)
         self.setLayout(layout)
 
+    # This method will apply the style to the calculator
     def apply_style(self):
         with open ('style.qss', 'r') as file:
             style = file.read()
             self.setStyleSheet(style)
 
+    # This method will handle the button click event
     def button_clicked(self):
         button = self.sender()
         value = button.text()
@@ -60,13 +64,14 @@ class Calculator(QWidget):
     def restart(self):
         self.result_field.setText('')
 
-if __name__ == "__main__":
+# This method will run the application
+def run():
     app = QApplication(sys.argv)
     window = Calculator()
     window.show()
     sys.exit(app.exec())
 
-def run():
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Calculator()
     window.show()

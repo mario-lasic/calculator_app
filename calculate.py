@@ -1,8 +1,11 @@
 import math
 
+
 class Calculate():
     def __init__(self, statement):
         self.statement = statement
+
+    # This method will calculate the result of the statement
 
     def calculate(self):
         try:
