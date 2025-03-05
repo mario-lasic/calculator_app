@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QApplication, QWidget, 
                                QVBoxLayout, QHBoxLayout, 
                                QPushButton, QLineEdit, QLabel,
-                               QGridLayout)
+                               QGridLayout,)
 import sys
 from calculate import Calculate
 
@@ -13,6 +13,7 @@ class Calculator(QWidget):
         self.setGeometry(100, 100, 300, 400)
 
         self.createUI()
+        self.apply_style()
 
     def createUI(self):
         self.result_field = QLabel()
@@ -39,6 +40,11 @@ class Calculator(QWidget):
         layout.addLayout(buttons_layout)
         self.setLayout(layout)
 
+    def apply_style(self):
+        with open ('style.qss', 'r') as file:
+            style = file.read()
+            self.setStyleSheet(style)
+
     def button_clicked(self):
         button = self.sender()
         value = button.text()
@@ -55,6 +61,12 @@ class Calculator(QWidget):
         self.result_field.setText('')
 
 if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = Calculator()
+    window.show()
+    sys.exit(app.exec())
+
+def run():
     app = QApplication(sys.argv)
     window = Calculator()
     window.show()
