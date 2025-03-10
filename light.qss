@@ -41,3 +41,33 @@ QPushButton#equals:hover {
 QPushButton#equals:pressed {
     background-color: #f70;
 }
+
+QMenuBar {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+QMenuBar::item {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+QMenuBar::item:selected {
+    background-color: #d0d0d0;
+}
+
+QMenu {
+    background-color: #e0e0e0;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+QMenu::item {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+QMenu::item:selected {
+    background-color: #d0d0d0;
+}
+

@@ -1,7 +1,6 @@
-from PySide6.QtWidgets import (QApplication, QWidget, 
-                               QVBoxLayout, QHBoxLayout, 
-                               QPushButton, QLineEdit, QLabel,
-                               QGridLayout,)
+from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout, 
+                               QPushButton, QLineEdit, QLabel, QGridLayout, QMenuBar)
+from PySide6.QtGui import QAction
 import sys
 from calculate import Calculate
 
@@ -13,9 +12,9 @@ class Calculator(QWidget):
         self.setGeometry(100, 100, 300, 400)
 
         self.createUI()
-        self.apply_style()
+        self.createMenuBar()
+        self.apply_style('light')
 
-    # This method will create the UI of the calculator
     def createUI(self):
         self.result_field = QLabel()
         layout = QVBoxLayout()
@@ -24,8 +23,7 @@ class Calculator(QWidget):
         self.signs = [['AC', '^', '%', '/'], ['7', '8', '9', 'X'], 
                       ['4', '5', '6', '-'], ['1', '2', '3', '+'], 
                       ['0', '.', '=', '']]
-        
-        # Create the buttons
+
         buttons_layout = QGridLayout()
         for row in range(5):
             for column in range(4):
@@ -42,13 +40,30 @@ class Calculator(QWidget):
         layout.addLayout(buttons_layout)
         self.setLayout(layout)
 
-    # This method will apply the style to the calculator
-    def apply_style(self):
-        with open ('style.qss', 'r') as file:
-            style = file.read()
-            self.setStyleSheet(style)
+    def createMenuBar(self):
+        menubar = QMenuBar(self)
+        style_menu = menubar.addMenu('Style')
 
-    # This method will handle the button click event
+        light_action = QAction('Light', self)
+        light_action.triggered.connect(lambda: self.apply_style('light'))
+        style_menu.addAction(light_action)
+
+        dark_action = QAction('Dark', self)
+        dark_action.triggered.connect(lambda: self.apply_style('dark'))
+        style_menu.addAction(dark_action)
+
+        layout = self.layout()
+        layout.setMenuBar(menubar)
+
+    def apply_style(self, style_name):
+        if style_name == 'light':
+            with open('light.qss', 'r') as file:
+                style = file.read()
+        elif style_name == 'dark':
+            with open('dark.qss', 'r') as file:
+                style = file.read()
+        self.setStyleSheet(style)
+
     def button_clicked(self):
         button = self.sender()
         value = button.text()
@@ -63,13 +78,6 @@ class Calculator(QWidget):
 
     def restart(self):
         self.result_field.setText('')
-
-# This method will run the application
-def run():
-    app = QApplication(sys.argv)
-    window = Calculator()
-    window.show()
-    sys.exit(app.exec())
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
